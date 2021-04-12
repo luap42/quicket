@@ -130,7 +130,7 @@ while True:
 
                 ticket_list = map(lambda i: i.strip(), ticket_list)
                 ticket_list = [list(map(lambda j: j.strip(), i.split("|"))) for i in ticket_list]
-                ticket_list = [_ for _ in ticket_list if _[-1] == '+open']
+                ticket_list = [_ for _ in ticket_list if _[-1]]
 
                 ticket_list = [[*i[:-1], '+closed'] if i[0] == str(query_id) else i for i in ticket_list]
 
@@ -147,7 +147,7 @@ while True:
             elif ticket_query == "open":
                 ticket += '\n-----\n'
                 ticket += '<' + username + '>\n'
-                ticket += 'ticket marked as +closed\n'
+                ticket += 'ticket marked as +open\n'
                 ticket += '\n'
 
                 with open("data/ticket_list", "r") as f:
@@ -155,9 +155,9 @@ while True:
 
                 ticket_list = map(lambda i: i.strip(), ticket_list)
                 ticket_list = [list(map(lambda j: j.strip(), i.split("|"))) for i in ticket_list]
-                ticket_list = [_ for _ in ticket_list if _[-1] == '+open']
+                ticket_list = [_ for _ in ticket_list if _[-1]]
 
-                ticket_list = [[*i[:-1], '+closed'] if i[0] == str(query_id) else i for i in ticket_list]
+                ticket_list = [[*i[:-1], '+open'] if i[0] == str(query_id) else i for i in ticket_list]
 
                 ticket_list = [' | '.join(i) for i in ticket_list]
                 
