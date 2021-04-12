@@ -24,6 +24,7 @@ print("What do you want to do?\nChoose help for a list of commands.")
 while True:
     print()
     query = input(">>> ").strip()
+    if query == "": continue
 
     if query == "help":
         print("List of commands")
@@ -77,6 +78,7 @@ while True:
         while True:
             print()
             ticket_query = input("[" + str(query_id) + "]> ").strip()
+            if ticket_query == "": continue
 
             if ticket_query == "help":
                 print("List of commands in ticket mode")
@@ -140,7 +142,7 @@ while True:
                     f.write(ticket)
 
                 with open("data/ticket_list", "w") as f:
-                    f.writelines(ticket_list)
+                    f.write('\n'.join(ticket_list))
                 
                 print("Okay.")
 
@@ -165,7 +167,7 @@ while True:
                     f.write(ticket)
 
                 with open("data/ticket_list", "w") as f:
-                    f.writelines(ticket_list)
+                    f.write('\n'.join(ticket_list))
                 
                 print("Okay.")
             
@@ -173,6 +175,55 @@ while True:
             else:
                 print("Command not found.")
 
+    elif query == "new":
+        print("Creating a new ticket.")
+        title = input("Ticket title: ")
+
+        print("Please add your message; three empty lines to continue")
+        nlc = 0
+        message = []
+        while True:
+            message.append(input("$ ").strip())
+            if message[-1] == "":
+                nlc += 1
+            else:
+                nlc = 0
+
+            if nlc == 3:
+                message = message[:-3]
+                break
+        
+        ticket = ''
+        ticket += '#' * (len(title) + 8) + '\n'
+        ticket += '#   ' + title + '   #\n'
+        ticket += '#' * (len(title) + 8) + '\n\n'
+        ticket += 'ticket opened by ' + username + '\n'
+
+        ticket += '\n-----\n'
+        ticket += '<' + username + '>\n\n'
+        ticket += '\n'.join(message).strip()
+        ticket += '\n'
+
+        with open("data/ticket_list", "r") as f:
+            ticket_list = f.readlines()
+
+        ticket_list = map(lambda i: i.strip(), ticket_list)
+        ticket_list = [list(map(lambda j: j.strip(), i.split("|"))) for i in ticket_list]
+        ticket_list = [_ for _ in ticket_list if _[-1]]
+
+        if len(ticket_list) > 0:
+            ticket_id = int(ticket_list[-1][0]) + 1
+        else:
+            ticket_id = 1
+
+        ticket_list.append([str(ticket_id), username, title, '+open'])
+        ticket_list = [' | '.join(i) for i in ticket_list]
+
+        with open("data/tickets/" + str(ticket_id), "w") as f:
+            f.write(ticket)
+
+        with open("data/ticket_list", "w") as f:
+            f.write('\n'.join(ticket_list))
 
     elif query == "quit": break
     else:
