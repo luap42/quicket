@@ -1,7 +1,13 @@
 #! /usr/bin/python3
 
-import sys
+import sys, os
 import tabulate
+
+if not os.path.exists("data/tickets"):
+    os.makedirs("data/tickets")
+
+if not os.path.exists("data/ticket_list"):
+    with open("data/ticket_list", "w"): pass
 
 IS_ADMIN = len(sys.argv) == 2 and sys.argv[1] == ".admin"
 
