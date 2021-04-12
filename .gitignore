@@ -1,0 +1,3 @@
+data/ticket_list
+data/tickets/*
+!data/tickets/.keep
